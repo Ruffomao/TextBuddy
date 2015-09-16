@@ -160,7 +160,7 @@ public class TextBuddy {
 		}
 	}
 
-	static void operationClear() throws IOException {
+	private static void operationClear() throws IOException {
 		clearAllContent();
 		printClearSuccess();
 	}
@@ -262,10 +262,10 @@ public class TextBuddy {
 		bufferedReader.close();
 		return numberOfLines;
 	}
-	
+
 	/*
-	 * Copies the content on the file onto an ArrayList<String>. Each line of text will
-	 * occupy an index
+	 * Copies the content on the file onto an ArrayList<String>. Each line of
+	 * text will occupy an index
 	 * 
 	 * @param numOfLines: the number of lines in the file
 	 * 
@@ -280,7 +280,7 @@ public class TextBuddy {
 		bufferedReader.close();
 		return textArray;
 	}
-	
+
 	/*
 	 * Instantiates the FileReader and BufferedReader objects
 	 */
@@ -288,7 +288,7 @@ public class TextBuddy {
 		reader = new FileReader(file);
 		bufferedReader = new BufferedReader(reader);
 	}
-	
+
 	/*
 	 * Instantiates the FileWriter, BufferedWriter and PrintWriter objects
 	 */
