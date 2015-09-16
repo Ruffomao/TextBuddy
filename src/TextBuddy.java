@@ -32,7 +32,7 @@ public class TextBuddy {
 	private static final String MESSAGE_DELETE_FAIL_1 = "Failed to delete line ";
 	private static final String MESSAGE_DELETE_FAIL_2 = " from ";
 	private static final String MESSAGE_DELETE_SUCCESS = " successfully deleted from ";
-	//private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
+	private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
 
 	/*
 	 * OPERATIONS
