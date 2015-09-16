@@ -88,10 +88,10 @@ public class TextBuddy {
 		case ADD:
 			operationAdd(operationContent);
 			return;
-		/*case DISPLAY:
+		case DISPLAY:
 			operationDisplay();
 			return;
-		case CLEAR:
+		/*case CLEAR:
 			operationClear();
 			return;
 		case DELETE:
@@ -139,6 +139,16 @@ public class TextBuddy {
 	private static void operationAdd(String operationContent) throws IOException {
 		writeToFile(operationContent);
 		printAddSuccess(operationContent);
+	}
+	
+	private static void operationDisplay() throws IOException {
+		int numOfLines = countNumOfLines();
+		if (numOfLines > 0) {
+			sentencesArray = new ArrayList<String>();
+			printOrderedList(sentencesArray, numOfLines);
+		} else {
+			printDisplayEmpty();
+		}
 	}
 	
 	private static void writeToFile(String content) throws IOException {
@@ -222,21 +232,6 @@ public class TextBuddy {
 		}
 	}
 
-	/* This method copies the contents on a file into an arrayList.
-	 * 
-	 * @param numOfLines: the number of lines in the file
-	 * 		  br: BufferedReader object name
-	 * 
-	 * @return an arrayList holding the contents of the target file
-	 */
-	private static ArrayList<String> contentToArrayList(int numOfLines, BufferedReader br) throws IOException {
-		ArrayList<String> textArray = new ArrayList<String>();
-		for (int i = 0; i < numOfLines; i++) {
-			textArray.add(br.readLine());
-		}
-		return textArray;
-	}
-
 	// This method scans for the user's input and returns it as a string
 	private static String askForUserInput(Scanner sc) {
 		String userInputString = sc.nextLine();
@@ -248,30 +243,6 @@ public class TextBuddy {
 		System.out.print("command: ");
 		String userCommand = sc.next();
 		return userCommand;
-	}
-
-	/* This method prints the contents within the file in a numbered list
-	 * 
-	 * @param file: the target file
-	 * 		  br: BufferedReader object name
-	 * 		  numOfLines: the number of lines of text in a file
-	 */
-	private static void displayContent(File file, BufferedReader br, int numOfLines) throws IOException {
-		if (numOfLines > 0) {
-			for (int i = 1; i <= numOfLines; i++) {
-				System.out.print(i + ". ");
-				printLine(br);
-				System.out.println("");
-			}
-		} else {
-			System.out.println(file + " is empty");
-		}
-	}
-
-	// This method prints a string within the file, beginning from the top
-	private static void printLine(BufferedReader br) throws IOException {
-		String lineToPrint = br.readLine();
-		System.out.print(lineToPrint);
 	}
 
 	/* This method appends a string to the end of a file beginning on a new line
@@ -320,14 +291,22 @@ public class TextBuddy {
 	 * 
 	 * @return the number of lines in the file
 	 */
-	private static int countNumOfLines(File file) throws IOException {
+	private static int countNumOfLines() throws IOException {
 		int numberOfLines = 0;
-		BufferedReader br = readFile(file);
-		while (br.readLine() != null) {
+		BufferedReader bufferedReader = createReader();
+		while (bufferedReader.readLine() != null) {
 			numberOfLines++;
 		}
-		br.close();
+		bufferedReader.close();
 		return numberOfLines;
+	}
+	
+	private static void contentToArray(int numOfLines) throws IOException {
+		bufferedReader = createReader();
+		for (int i = 0; i < numOfLines; i++) {
+			sentencesArray.add(bufferedReader.readLine());
+		}
+		bufferedReader.close();
 	}
 	
 	private static BufferedReader createReader() throws FileNotFoundException {
@@ -361,5 +340,20 @@ public class TextBuddy {
 	
 	private static void printAddSuccess(String content) {
 		System.out.println(MESSAGE_INVERTED_COMMAS + content + MESSAGE_INVERTED_COMMAS + MESSAGE_ADD_SUCCESS + file);
+	}
+	
+	private static void printDisplayEmpty() {
+		System.out.println(file + MESSAGE_DISPLAY_EMPTY);
+	}
+	
+	private static void printOrderedList(ArrayList<String> stringArray, int numOfLines) throws IOException {
+		contentToArray(numOfLines);
+		int index = 1;
+		for (int i = 0; i < numOfLines; i++) {
+			System.out.print(index + ". ");
+			System.out.print(stringArray.get(i));
+			System.out.println();
+			index++;
+		}
 	}
 }
