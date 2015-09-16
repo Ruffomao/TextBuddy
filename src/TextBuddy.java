@@ -46,7 +46,7 @@ public class TextBuddy {
 		runProgram();
 	}
 
-	private static void initiateProgram(String[] args) throws IOException {
+	public static void initiateProgram(String[] args) throws IOException {
 		file = new File(args[0]);
 		if (!file.exists()) {
 			file.createNewFile();
@@ -54,7 +54,7 @@ public class TextBuddy {
 		printWelcome(args);
 	}
 
-	private static void runProgram() throws IOException {
+	public static void runProgram() throws IOException {
 		while (IS_ACCEPTING_COMMAND) {
 			printCommandPrompt();
 			executeCommand(parseCommand());
@@ -73,11 +73,11 @@ public class TextBuddy {
 		return commandArray;
 	}
 
-	private static String getCommand(String userCommand) {
+	public static String getCommand(String userCommand) {
 		return userCommand.replace(getOperation(userCommand), "").trim();
 	}
 
-	private static String getOperation(String userCommand) {
+	public static String getOperation(String userCommand) {
 		return userCommand.trim().split("\\s++")[0];
 	}
 
@@ -88,7 +88,7 @@ public class TextBuddy {
 	 * @param command: An ArrayList containing the command and its relevant
 	 * content
 	 */
-	private static void executeCommand(ArrayList<String> command) throws IOException {
+	public static void executeCommand(ArrayList<String> command) throws IOException {
 		OPERATION_TYPE operationType = getOperationType(command.get(0));
 		String operationContent = command.get(1);
 
@@ -121,7 +121,7 @@ public class TextBuddy {
 	/*
 	 * Casts a string type into an OPERATION_TYPE
 	 */
-	private static OPERATION_TYPE getOperationType(String userOperation) {
+	public static OPERATION_TYPE getOperationType(String userOperation) {
 		if (userOperation.equalsIgnoreCase("add")) {
 			return OPERATION_TYPE.ADD;
 		} else if (userOperation.equalsIgnoreCase("display")) {
@@ -141,16 +141,16 @@ public class TextBuddy {
 		}
 	}
 
-	private static void operationInvalid() {
+	public static void operationInvalid() {
 		printCommandInvalid();
 	}
 
-	private static void operationAdd(String operationContent) throws IOException {
+	public static void operationAdd(String operationContent) throws IOException {
 		writeToFile(operationContent);
 		printAddSuccess(operationContent);
 	}
 
-	private static void operationDisplay() throws IOException {
+	public static void operationDisplay() throws IOException {
 		int numOfLines = countNumOfLines();
 		if (numOfLines > 0) {
 			ArrayList<String> sentencesArray = new ArrayList<String>();
@@ -160,12 +160,12 @@ public class TextBuddy {
 		}
 	}
 
-	private static void operationClear() throws IOException {
+	public static void operationClear() throws IOException {
 		clearAllContent();
 		printClearSuccess();
 	}
 
-	private static void operationDelete(String content) throws IOException {
+	public static void operationDelete(String content) throws IOException {
 		int lineToDelete = new Integer(content);
 		int numOfLines = countNumOfLines();
 		if (lineToDelete > numOfLines) {
@@ -196,7 +196,7 @@ public class TextBuddy {
 	 * 
 	 * @return the string which has been deleted
 	 */
-	private static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
+	public static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
 		ArrayList<String> sentencesArray = new ArrayList<String>();
 		sentencesArray = contentToArray(numOfLines);
 		String textToBeDeleted = getSpecificLine(sentencesArray, lineToDelete);
@@ -223,7 +223,7 @@ public class TextBuddy {
 	}
 
 	// This method clears all the contents on a file
-	private static void clearAllContent() throws FileNotFoundException {
+	public static void clearAllContent() throws FileNotFoundException {
 		printWriter = new PrintWriter(file);
 		printWriter.print("");
 		printWriter.close();
@@ -253,7 +253,7 @@ public class TextBuddy {
 	 * 
 	 * @return the number of lines in the file
 	 */
-	private static int countNumOfLines() throws IOException {
+	public static int countNumOfLines() throws IOException {
 		int numberOfLines = 0;
 		createReader();
 		while (bufferedReader.readLine() != null) {
@@ -284,7 +284,7 @@ public class TextBuddy {
 	/*
 	 * Instantiates the FileReader and BufferedReader objects
 	 */
-	private static void createReader() throws FileNotFoundException {
+	public static void createReader() throws FileNotFoundException {
 		reader = new FileReader(file);
 		bufferedReader = new BufferedReader(reader);
 	}
@@ -292,7 +292,7 @@ public class TextBuddy {
 	/*
 	 * Instantiates the FileWriter, BufferedWriter and PrintWriter objects
 	 */
-	private static void createWriter() throws IOException {
+	public static void createWriter() throws IOException {
 		writer = new FileWriter(file, true);
 		bufferedWriter = new BufferedWriter(writer);
 		printWriter = new PrintWriter(bufferedWriter);
