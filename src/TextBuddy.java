@@ -17,8 +17,8 @@ public class TextBuddy {
 	private static FileReader reader;
 	private static BufferedReader bufferedReader;
 	private static PrintWriter printWriter;
-	private static ArrayList<String> sentencesArray;
-	private static ArrayList<String> commandArray;
+	// private static ArrayList<String> sentencesArray;
+	// private static ArrayList<String> commandArray;
 	// private static ArrayList<String> searchArray;
 	
 	/*
@@ -66,7 +66,7 @@ public class TextBuddy {
 	
 	private static ArrayList<String> parseCommand() {
 		String userCommand = sc.nextLine();
-		commandArray = new ArrayList<String>();
+		ArrayList<String> commandArray = new ArrayList<String>();
 		commandArray.add(getOperation(userCommand));
 		commandArray.add(getCommand(userCommand));
 		return commandArray;
@@ -144,7 +144,7 @@ public class TextBuddy {
 	private static void operationDisplay() throws IOException {
 		int numOfLines = countNumOfLines();
 		if (numOfLines > 0) {
-			sentencesArray = new ArrayList<String>();
+			ArrayList<String> sentencesArray = new ArrayList<String>();
 			printOrderedList(sentencesArray, numOfLines);
 		} else {
 			printDisplayEmpty();
@@ -174,7 +174,7 @@ public class TextBuddy {
 	}
 	
 	private static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
-		sentencesArray = new ArrayList<String>();
+		ArrayList<String> sentencesArray = new ArrayList<String>();
 		sentencesArray = contentToArray(numOfLines);
 		String textToBeDeleted = getSpecificLine(sentencesArray, lineToDelete);
 		clearAllContent();
@@ -291,7 +291,7 @@ public class TextBuddy {
 	}
 	
 	private static void printOrderedList(ArrayList<String> stringArray, int numOfLines) throws IOException {
-		contentToArray(numOfLines);
+		stringArray = contentToArray(numOfLines);
 		int index = 1;
 		for (int i = 0; i < numOfLines; i++) {
 			System.out.print(index + ". ");
