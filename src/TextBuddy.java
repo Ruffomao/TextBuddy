@@ -94,10 +94,10 @@ public class TextBuddy {
 		case CLEAR:
 			operationClear();
 			return;
-		/*case DELETE:
+		case DELETE:
 			operationDelete(operationContent);
 			return;
-		case SORT:
+		/*case SORT:
 			operationSort();
 			return;
 		/*
@@ -156,70 +156,32 @@ public class TextBuddy {
 		printClearSuccess();
 	}
 	
+	private static void operationDelete(String content) throws IOException {
+		int lineToDelete = new Integer(content);
+		int numOfLines = countNumOfLines();
+		if (lineToDelete > numOfLines) {
+			printDeleteFail(lineToDelete);
+		} else {
+			String textToBeDeleted = deleteLine(lineToDelete, numOfLines);
+			printDeleteSuccess(textToBeDeleted);
+		}
+	}
+	
 	private static void writeToFile(String content) throws IOException {
-		PrintWriter printWriter = createWriter();
+		createWriter();
 		printWriter.println(content);
 		printWriter.close();
 	}
-
-	/*
-	 * This method executes different actions based on the user's input ADD:
-	 * appends a string to the end of the file beginning on a new line CLEAR:
-	 * clears all the contents within the file DISPLAY: prints a numbered list
-	 * of the contents within the file DELETE: deletes a specified line of text
-	 * within the file EXIT: terminates the program on the command line
-	 * 
-	 * @param file
-	 */
-	/*private static void executeCommands(File file) throws IOException, FileNotFoundException {
-		Scanner sc = new Scanner(System.in);
-		while (IS_ACCEPTING_COMMAND) {
-			String userCommand = askForUserCommand(sc);
-
-			if (userCommand.equalsIgnoreCase("exit")) {
-				IS_ACCEPTING_COMMAND = false;
-
-			} else if (userCommand.equalsIgnoreCase("add")) {
-				String userInputString = askForUserInput(sc);
-				addStringToFile(file, userInputString);
-				printAddAction(file, userInputString);
-
-			} else if (userCommand.equalsIgnoreCase("display")) {
-				BufferedReader br = readFile(file);
-				int numOfLines = countNumOfLines(file);
-				displayContent(file, br, numOfLines);
-				br.close();
-
-			} else if (userCommand.equalsIgnoreCase("clear")) {
-				clearAllContent(file);
-				printClearAction(file);
-
-			} else if (userCommand.equalsIgnoreCase("delete")) {
-				int lineToBeDeleted = sc.nextInt();
-				int numOfLines = countNumOfLines(file);
-				BufferedReader br = readFile(file);
-
-				if (lineToBeDeleted > numOfLines) {
-					printDeleteFailedAction(file, lineToBeDeleted);
-				} else {
-					// Find the string to be deleted
-					String textToBeDeleted = getSpecificLine(file, lineToBeDeleted);
-					ArrayList<String> textArray = contentToArrayList(numOfLines, br);
-					clearAllContent(file);
-					// removes the line to be deleted and copies the contents of
-					// the ArrayList back onto the file
-					textArray.remove(lineToBeDeleted - 1);
-					arrayListToFile(file, textArray);
-					printDeleteAction(file, textToBeDeleted);
-					br.close();
-				}
-
-			} else {
-				printNonValidAction();
-			}
-		}
-		sc.close();
-	}*/
+	
+	private static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
+		sentencesArray = new ArrayList<String>();
+		sentencesArray = contentToArray(numOfLines);
+		String textToBeDeleted = getSpecificLine(sentencesArray, lineToDelete);
+		clearAllContent();
+		sentencesArray.remove(lineToDelete - 1);
+		arrayToFile(sentencesArray);
+		return textToBeDeleted;
+	}
 
 	/*
 	 * This method copies the contents in the given arrayList onto the file.
@@ -229,43 +191,17 @@ public class TextBuddy {
 	 * 		  textArray: the arrayList object used in storing the contents of the file
 	 * 
 	 */
-	private static void arrayListToFile(File file, ArrayList<String> textArray) throws IOException {
+	private static void arrayToFile(ArrayList<String> textArray) throws IOException {
 		String stringToAdd;
 		for (int i = 0; i < textArray.size(); i++) {
 			stringToAdd = textArray.get(i);
-			addStringToFile(file, stringToAdd);
+			writeToFile(stringToAdd);
 		}
-	}
-
-	// This method scans for the user's input and returns it as a string
-	private static String askForUserInput(Scanner sc) {
-		String userInputString = sc.nextLine();
-		return userInputString;
-	}
-
-	// This method asks for the user's command and returns the input as a string
-	private static String askForUserCommand(Scanner sc) {
-		System.out.print("command: ");
-		String userCommand = sc.next();
-		return userCommand;
-	}
-
-	/* This method appends a string to the end of a file beginning on a new line
-	 * 
-	 * @param file: the target file
-	 * 		  inputString: the string which the user wants added to the file
-	 */
-	private static void addStringToFile(File file, String inputString) throws IOException {
-		FileWriter fw = new FileWriter(file, true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		PrintWriter pw = new PrintWriter(bw);
-		pw.println(inputString.trim());
-		pw.close();
 	}
 
 	// This method clears all the contents on a file
 	private static void clearAllContent() throws FileNotFoundException {
-		PrintWriter printWriter = new PrintWriter(file);
+		printWriter = new PrintWriter(file);
 		printWriter.print("");
 		printWriter.close();
 	}
@@ -277,17 +213,8 @@ public class TextBuddy {
 	 * 
 	 * @return the string in that line
 	 */
-	private static String getSpecificLine(File file, int lineToBeDeleted) throws FileNotFoundException, IOException {
-		BufferedReader br = readFile(file);
-		// Assign a temporary variable to be used for counting
-		int lineIndex = lineToBeDeleted;
-		String textToBeDeleted = null;
-		while (lineIndex > 0) {
-			textToBeDeleted = br.readLine();
-			lineIndex--;
-		}
-		br.close();
-		return textToBeDeleted;
+	private static String getSpecificLine(ArrayList<String> textArray, int lineIndex) throws FileNotFoundException, IOException {
+		return textArray.get(lineIndex - 1);
 	}
 
 	/* This method counts the number of lines of text in a file and returns it as an integer
@@ -298,7 +225,7 @@ public class TextBuddy {
 	 */
 	private static int countNumOfLines() throws IOException {
 		int numberOfLines = 0;
-		BufferedReader bufferedReader = createReader();
+		createReader();
 		while (bufferedReader.readLine() != null) {
 			numberOfLines++;
 		}
@@ -306,25 +233,25 @@ public class TextBuddy {
 		return numberOfLines;
 	}
 	
-	private static void contentToArray(int numOfLines) throws IOException {
-		bufferedReader = createReader();
+	private static ArrayList<String> contentToArray(int numOfLines) throws IOException {
+		createReader();
+		ArrayList<String> textArray = new ArrayList<String>();
 		for (int i = 0; i < numOfLines; i++) {
-			sentencesArray.add(bufferedReader.readLine());
+			textArray.add(bufferedReader.readLine());
 		}
 		bufferedReader.close();
+		return textArray;
 	}
 	
-	private static BufferedReader createReader() throws FileNotFoundException {
+	private static void createReader() throws FileNotFoundException {
 		reader = new FileReader(file);
 		bufferedReader = new BufferedReader(reader);
-		return bufferedReader;
 	}
 
-	private static PrintWriter createWriter() throws IOException {
+	private static void createWriter() throws IOException {
 		writer = new FileWriter(file, true);
 		bufferedWriter = new BufferedWriter(writer);
 		printWriter = new PrintWriter(bufferedWriter);
-		return printWriter;
 	}
 	
 	/*
@@ -349,6 +276,14 @@ public class TextBuddy {
 	
 	private static void printClearSuccess() {
 		System.out.println(MESSAGE_CLEAR_SUCCESS + file);
+	}
+	
+	private static void printDeleteFail(Integer lineToDelete) {
+		System.out.println(MESSAGE_DELETE_FAIL_1 + lineToDelete + MESSAGE_DELETE_FAIL_2 + file);
+	}
+
+	private static void printDeleteSuccess(String textToBeDeleted) {
+		System.out.println(MESSAGE_INVERTED_COMMAS + textToBeDeleted + MESSAGE_INVERTED_COMMAS + MESSAGE_DELETE_SUCCESS + file);
 	}
 	
 	private static void printDisplayEmpty() {
