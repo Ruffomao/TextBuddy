@@ -91,10 +91,10 @@ public class TextBuddy {
 		case DISPLAY:
 			operationDisplay();
 			return;
-		/*case CLEAR:
+		case CLEAR:
 			operationClear();
 			return;
-		case DELETE:
+		/*case DELETE:
 			operationDelete(operationContent);
 			return;
 		case SORT:
@@ -149,6 +149,11 @@ public class TextBuddy {
 		} else {
 			printDisplayEmpty();
 		}
+	}
+	
+	static void operationClear() throws IOException {
+		clearAllContent();
+		printClearSuccess();
 	}
 	
 	private static void writeToFile(String content) throws IOException {
@@ -259,10 +264,10 @@ public class TextBuddy {
 	}
 
 	// This method clears all the contents on a file
-	private static void clearAllContent(File file) throws FileNotFoundException {
-		PrintWriter pw = new PrintWriter(file);
-		pw.print("");
-		pw.close();
+	private static void clearAllContent() throws FileNotFoundException {
+		PrintWriter printWriter = new PrintWriter(file);
+		printWriter.print("");
+		printWriter.close();
 	}
 
 	/* This method retrieves the string on a specific line in the file
@@ -340,6 +345,10 @@ public class TextBuddy {
 	
 	private static void printAddSuccess(String content) {
 		System.out.println(MESSAGE_INVERTED_COMMAS + content + MESSAGE_INVERTED_COMMAS + MESSAGE_ADD_SUCCESS + file);
+	}
+	
+	private static void printClearSuccess() {
+		System.out.println(MESSAGE_CLEAR_SUCCESS + file);
 	}
 	
 	private static void printDisplayEmpty() {
