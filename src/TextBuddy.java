@@ -65,7 +65,7 @@ public class TextBuddy {
 	 * Parses the user entered string and returns an ArrayList<String>
 	 * containing the command and the relevant contents
 	 */
-	private static ArrayList<String> parseCommand() {
+	public static ArrayList<String> parseCommand() {
 		String userCommand = sc.nextLine();
 		ArrayList<String> commandArray = new ArrayList<String>();
 		commandArray.add(getOperation(userCommand));
@@ -181,7 +181,7 @@ public class TextBuddy {
 	 * 
 	 * @param content: the string which is to be written onto the file
 	 */
-	private static void writeToFile(String content) throws IOException {
+	public static void writeToFile(String content) throws IOException {
 		createWriter();
 		printWriter.println(content);
 		printWriter.close();
@@ -214,7 +214,7 @@ public class TextBuddy {
 	 * storing the contents of the file
 	 * 
 	 */
-	private static void arrayToFile(ArrayList<String> textArray) throws IOException {
+	public static void arrayToFile(ArrayList<String> textArray) throws IOException {
 		String stringToAdd;
 		for (int i = 0; i < textArray.size(); i++) {
 			stringToAdd = textArray.get(i);
@@ -240,7 +240,7 @@ public class TextBuddy {
 	 * 
 	 * @return the line of text
 	 */
-	private static String getSpecificLine(ArrayList<String> textArray, int lineIndex)
+	public static String getSpecificLine(ArrayList<String> textArray, int lineIndex)
 			throws FileNotFoundException, IOException {
 		return textArray.get(lineIndex - 1);
 	}
@@ -271,7 +271,7 @@ public class TextBuddy {
 	 * 
 	 * @return an ArrayList<String> with the contents of the file
 	 */
-	private static ArrayList<String> contentToArray(int numOfLines) throws IOException {
+	public static ArrayList<String> contentToArray(int numOfLines) throws IOException {
 		createReader();
 		ArrayList<String> textArray = new ArrayList<String>();
 		for (int i = 0; i < numOfLines; i++) {
