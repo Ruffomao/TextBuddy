@@ -27,8 +27,7 @@ public class TextBuddy {
 	private static final String MESSAGE_DELETE_FAIL_1 = "Failed to delete line ";
 	private static final String MESSAGE_DELETE_FAIL_2 = " from ";
 	private static final String MESSAGE_DELETE_SUCCESS = " successfully deleted from ";
-	// private static final String MESSAGE_SORT_SUCCESS = " has been sorted
-	// successfully";
+	private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
 
 	/*
 	 * OPERATIONS
@@ -186,10 +185,14 @@ public class TextBuddy {
 			printDeleteSuccess(file, textToBeDeleted);
 		}
 	}
-	
-	public void operationSort(File file) {
+
+	public void operationSort(File file) throws IOException {
 		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = contentToArray(file, countNumOfLines(file));
 		contentArray = sortArray(contentArray);
+		clearAllContent(file);
+		arrayToFile(file, contentArray);
+		printMessageSuccess(file);
 	}
 
 	/*
@@ -296,7 +299,7 @@ public class TextBuddy {
 		bufferedReader.close();
 		return textArray;
 	}
-	
+
 	/*
 	 * Sorts the array
 	 */
@@ -354,6 +357,10 @@ public class TextBuddy {
 	private static void printDeleteSuccess(File file, String textToBeDeleted) {
 		System.out.println(
 				MESSAGE_INVERTED_COMMAS + textToBeDeleted + MESSAGE_INVERTED_COMMAS + MESSAGE_DELETE_SUCCESS + file);
+	}
+	
+	private void printMessageSuccess(File file) {
+		System.out.println(file + MESSAGE_SORT_SUCCESS);
 	}
 
 	private static void printDisplayEmpty(File file) {
