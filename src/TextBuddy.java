@@ -301,7 +301,11 @@ public class TextBuddy {
 	}
 
 	/*
-	 * Sorts the array
+	 * Sorts the array in alphabetical order
+	 * 
+	 * @param contentArray: the array to be sorted
+	 * 
+	 * @return the sorted ArrayList
 	 */
 	public static ArrayList<String> sortArray(ArrayList<String> contentArray) {
 		Collections.sort(contentArray);
