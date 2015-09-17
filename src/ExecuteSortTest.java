@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ExecuteSortTest {
 
 	@Test
-	public void testOperationTest() throws IOException {
+	public void testOperationTest1() throws IOException {
 		File testFile = new File("test.txt");
 		TextBuddy.clearAllContent(testFile);
 		TextBuddy.writeToFile(testFile, "d");
@@ -26,6 +26,28 @@ public class ExecuteSortTest {
 		Object[] resultArray = new String[contentArray.size()];
 		resultArray = contentArray.toArray();
 		String[] expectedArray = {"a", "b", "c", "d"};
+		
+		assertArrayEquals(expectedArray, resultArray);
+	}
+	
+	@Test
+	public void testOperationTest2() throws IOException {
+		File testFile = new File("test.txt");
+		TextBuddy.clearAllContent(testFile);
+		TextBuddy.writeToFile(testFile, "e");
+		TextBuddy.writeToFile(testFile, "c");
+		TextBuddy.writeToFile(testFile, "z");
+		TextBuddy.writeToFile(testFile, "a");
+		TextBuddy test = new TextBuddy();
+		
+		test.operationSort(testFile);
+		
+		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = TextBuddy.contentToArray(testFile, TextBuddy.countNumOfLines(testFile));
+		
+		Object[] resultArray = new String[contentArray.size()];
+		resultArray = contentArray.toArray();
+		String[] expectedArray = {"a", "c", "e", "z"};
 		
 		assertArrayEquals(expectedArray, resultArray);
 	}
