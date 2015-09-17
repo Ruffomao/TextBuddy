@@ -301,6 +301,7 @@ public class TextBuddy {
 	 * Sorts the array
 	 */
 	public static ArrayList<String> sortArray(ArrayList<String> contentArray) {
+		Collections.sort(contentArray);
 		return contentArray;
 	}
 

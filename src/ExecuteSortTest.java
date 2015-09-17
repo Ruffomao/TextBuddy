@@ -16,9 +16,7 @@ public class ExecuteSortTest {
 	@Test
 	public void testSortArray() throws IOException {
 		File file = new File("test.txt");
-		if (!file.exists()) {
-			file.createNewFile();
-		}
+		TextBuddy.clearAllContent(file);
 		TextBuddy.writeToFile(file, "d");
 		TextBuddy.writeToFile(file, "c");
 		TextBuddy.writeToFile(file, "b");
