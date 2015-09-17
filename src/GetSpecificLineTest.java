@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-public class GetSpecificLineTest extends TextBuddy {
+public class GetSpecificLineTest{
 
 	@Test
 	public void testGetSpecificLine1() throws IOException, Exception {
@@ -23,7 +23,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 1;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 1", result);
 	}
 
@@ -42,7 +42,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 2;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 2", result);
 	}
 
@@ -61,7 +61,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 3;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 3", result);
 	}
 
@@ -80,7 +80,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 4;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 4", result);
 	}
 
@@ -99,7 +99,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 10;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 10", result);
 	}
 
@@ -118,7 +118,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = 11;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 10", result);
 	}
 	
@@ -137,7 +137,7 @@ public class GetSpecificLineTest extends TextBuddy {
 		testArray.add("line 10");
 
 		int lineToBeDeleted = -1;
-		String result = getSpecificLine(testArray, lineToBeDeleted);
+		String result = TextBuddy.getSpecificLine(testArray, lineToBeDeleted);
 		assertEquals("line 10", result);
 	}
 

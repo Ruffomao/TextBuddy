@@ -2,29 +2,29 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class GetOperationTest extends TextBuddy {
+public class GetOperationTest {
 
 	@Test
 	public void testGetOperation1() {
-		String result = getOperation("add abc");
+		String result = TextBuddy.getOperation("add abc");
 		assertEquals("add", result);
 	}
 	
 	@Test
 	public void testGetOperation2() {
-		String result = getOperation("addabc");
+		String result = TextBuddy.getOperation("addabc");
 		assertEquals("addabc", result);
 	}
 	
 	@Test
 	public void testGetOperation3() {
-		String result = getOperation("");
+		String result = TextBuddy.getOperation("");
 		assertEquals("", result);
 	}
 	
 	@Test
 	public void testGetOperation4() {
-		String result = getOperation("add.123 abc");
+		String result = TextBuddy.getOperation("add.123 abc");
 		assertEquals("add.123", result);
 	}
 

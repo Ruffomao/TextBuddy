@@ -9,12 +9,8 @@ import java.util.*;
 
 public class TextBuddy {
 
-	/*
-	 * ATTRIBUTES
-	 */
 	private static boolean IS_ACCEPTING_COMMAND = true;
 	private static Scanner sc = new Scanner(System.in);
-	private static File file;
 	private static TextBuddy textBuddy;
 
 	/*
@@ -42,36 +38,39 @@ public class TextBuddy {
 	};
 
 	public static void main(String[] args) throws IOException {
-		textBuddy = new TextBuddy(args);
-		runProgram(args);
+		String fileName = args[0];
+		textBuddy = new TextBuddy();
+		File file = textBuddy.createFile(fileName);
+		printWelcome(fileName);
+		textBuddy.runProgram(file);
 	}
 
 	/*
 	 * CONSTRUCTORS
 	 */
 	public TextBuddy() {
-		
 	}
-	
-	public TextBuddy(String[] args) throws IOException {
-		file = new File(args[0]);
+
+	public File createFile(String fileName) throws IOException {
+		File file = new File(fileName);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
+		return file;
 	}
 
-	private static void runProgram(String[] args) throws IOException {
-		printWelcome(args[0]);
+	public void runProgram(File file) throws IOException {
 		while (IS_ACCEPTING_COMMAND) {
 			printCommandPrompt();
-			executeCommand(parseCommand());
+			executeCommand(file, parseCommand());
 		}
 	}
+
 	/*
 	 * Parses the user entered string and returns an ArrayList<String>
 	 * containing the command and the relevant contents
 	 */
-	private static ArrayList<String> parseCommand() {
+	public static ArrayList<String> parseCommand() {
 		String userCommand = sc.nextLine();
 		ArrayList<String> commandArray = new ArrayList<String>();
 		commandArray.add(getOperation(userCommand));
@@ -94,26 +93,28 @@ public class TextBuddy {
 	 * @param command: An ArrayList containing the command and its relevant
 	 * content
 	 */
-	private static void executeCommand(ArrayList<String> command) throws IOException {
+	public static void executeCommand(File file, ArrayList<String> command) throws IOException {
 		OPERATION_TYPE operationType = getOperationType(command.get(0));
 		String operationContent = command.get(1);
 
 		switch (operationType) {
 		case ADD:
-			textBuddy.operationAdd(operationContent);
+			textBuddy.operationAdd(file, operationContent);
 			return;
 		case DISPLAY:
-			textBuddy.operationDisplay();
+			textBuddy.operationDisplay(file);
 			return;
 		case CLEAR:
-			textBuddy.operationClear();
+			textBuddy.operationClear(file);
 			return;
 		case DELETE:
-			textBuddy.operationDelete(operationContent);
+			textBuddy.operationDelete(file, operationContent);
+			return;
+		case SORT:
+			textBuddy.operationSort(file);
 			return;
 		/*
-		 * case SORT: operationSort(); return; /* case SEARCH:
-		 * operationSearch(); return;
+		 * case SEARCH: operationSearch(); return;
 		 */
 		case EXIT:
 			IS_ACCEPTING_COMMAND = false;
@@ -146,7 +147,7 @@ public class TextBuddy {
 			return OPERATION_TYPE.INVALID;
 		}
 	}
-	
+
 	/*
 	 * OPERATIONS
 	 */
@@ -154,49 +155,50 @@ public class TextBuddy {
 		printCommandInvalid();
 	}
 
-	public void operationAdd(String operationContent) throws IOException {
-		writeToFile(operationContent);
-		printAddSuccess(operationContent);
+	public void operationAdd(File file, String operationContent) throws IOException {
+		writeToFile(file, operationContent);
+		printAddSuccess(file, operationContent);
 	}
 
-	public void operationDisplay() throws IOException {
-		int numOfLines = countNumOfLines();
+	public void operationDisplay(File file) throws IOException {
+		int numOfLines = countNumOfLines(file);
 		if (numOfLines > 0) {
 			ArrayList<String> sentencesArray = new ArrayList<String>();
+			sentencesArray = contentToArray(file, numOfLines);
 			printOrderedList(sentencesArray, numOfLines);
 		} else {
-			printDisplayEmpty();
+			printDisplayEmpty(file);
 		}
 	}
 
-	public void operationClear() throws IOException {
-		clearAllContent();
-		printClearSuccess();
+	public void operationClear(File file) throws IOException {
+		clearAllContent(file);
+		printClearSuccess(file);
 	}
 
-	public void operationDelete(String content) throws IOException {
+	public void operationDelete(File file, String content) throws IOException {
 		int lineToDelete = new Integer(content);
-		int numOfLines = countNumOfLines();
+		int numOfLines = countNumOfLines(file);
 		if (lineToDelete > numOfLines) {
-			printDeleteFail(lineToDelete);
+			printDeleteFail(file, lineToDelete);
 		} else {
-			String textToBeDeleted = deleteLine(lineToDelete, numOfLines);
-			printDeleteSuccess(textToBeDeleted);
+			String textToBeDeleted = deleteLine(file, lineToDelete, numOfLines);
+			printDeleteSuccess(file, textToBeDeleted);
 		}
 	}
 	
-	
-	/*
-	 * PRIVATE METHODS 
-	 */
-	
+	public void operationSort(File file) {
+		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = sortArray(contentArray);
+	}
+
 	/*
 	 * Writes a string onto the file
 	 * 
 	 * @param content: the string which is to be written onto the file
 	 */
-	private static void writeToFile(String content) throws IOException {
-		PrintWriter printWriter = createWriter();
+	public static void writeToFile(File file, String content) throws IOException {
+		PrintWriter printWriter = createWriter(file);
 		printWriter.println(content);
 		printWriter.close();
 	}
@@ -210,13 +212,13 @@ public class TextBuddy {
 	 * 
 	 * @return the string which has been deleted
 	 */
-	private static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
+	public static String deleteLine(File file, int lineToDelete, int numOfLines) throws IOException {
 		ArrayList<String> sentencesArray = new ArrayList<String>();
-		sentencesArray = contentToArray(numOfLines);
+		sentencesArray = contentToArray(file, numOfLines);
 		String textToBeDeleted = getSpecificLine(sentencesArray, lineToDelete);
-		clearAllContent();
+		clearAllContent(file);
 		sentencesArray.remove(lineToDelete - 1);
-		arrayToFile(sentencesArray);
+		arrayToFile(file, sentencesArray);
 		return textToBeDeleted;
 	}
 
@@ -228,23 +230,23 @@ public class TextBuddy {
 	 * storing the contents of the file
 	 * 
 	 */
-	private static void arrayToFile(ArrayList<String> textArray) throws IOException {
+	public static void arrayToFile(File file, ArrayList<String> textArray) throws IOException {
 		String stringToAdd;
 		for (int i = 0; i < textArray.size(); i++) {
 			stringToAdd = textArray.get(i);
-			writeToFile(stringToAdd);
+			writeToFile(file, stringToAdd);
 		}
 	}
 
 	// This method clears all the contents on a file
-	private static void clearAllContent() throws FileNotFoundException {
+	public static void clearAllContent(File file) throws FileNotFoundException {
 		PrintWriter printWriter = new PrintWriter(file);
 		printWriter.print("");
 		printWriter.close();
 	}
 
 	/*
-	 * This method retrieves the string on a specific line in the file
+	 * This method retrieves a specific string in the ArrayList
 	 * 
 	 * @param textArray: the ArrayList which contains the line of text to be
 	 * deleted
@@ -267,9 +269,9 @@ public class TextBuddy {
 	 * 
 	 * @return the number of lines in the file
 	 */
-	private static int countNumOfLines() throws IOException {
+	public static int countNumOfLines(File file) throws IOException {
 		int numberOfLines = 0;
-		BufferedReader bufferedReader = createReader();
+		BufferedReader bufferedReader = createReader(file);
 		while (bufferedReader.readLine() != null) {
 			numberOfLines++;
 		}
@@ -285,8 +287,8 @@ public class TextBuddy {
 	 * 
 	 * @return an ArrayList<String> with the contents of the file
 	 */
-	private static ArrayList<String> contentToArray(int numOfLines) throws IOException {
-		BufferedReader bufferedReader = createReader();
+	public static ArrayList<String> contentToArray(File file, int numOfLines) throws IOException {
+		BufferedReader bufferedReader = createReader(file);
 		ArrayList<String> textArray = new ArrayList<String>();
 		for (int i = 0; i < numOfLines; i++) {
 			textArray.add(bufferedReader.readLine());
@@ -294,11 +296,18 @@ public class TextBuddy {
 		bufferedReader.close();
 		return textArray;
 	}
+	
+	/*
+	 * Sorts the array
+	 */
+	public static ArrayList<String> sortArray(ArrayList<String> contentArray) {
+		return contentArray;
+	}
 
 	/*
 	 * Instantiates the FileReader and BufferedReader objects
 	 */
-	private static BufferedReader createReader() throws FileNotFoundException {
+	public static BufferedReader createReader(File file) throws FileNotFoundException {
 		FileReader reader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(reader);
 		return bufferedReader;
@@ -307,7 +316,7 @@ public class TextBuddy {
 	/*
 	 * Instantiates the FileWriter, BufferedWriter and PrintWriter objects
 	 */
-	private static PrintWriter createWriter() throws IOException {
+	public static PrintWriter createWriter(File file) throws IOException {
 		FileWriter writer = new FileWriter(file, true);
 		BufferedWriter bufferedWriter = new BufferedWriter(writer);
 		PrintWriter printWriter = new PrintWriter(bufferedWriter);
@@ -329,29 +338,28 @@ public class TextBuddy {
 		System.out.println(MESSAGE_INVALID);
 	}
 
-	private static void printAddSuccess(String content) {
+	private static void printAddSuccess(File file, String content) {
 		System.out.println(MESSAGE_INVERTED_COMMAS + content + MESSAGE_INVERTED_COMMAS + MESSAGE_ADD_SUCCESS + file);
 	}
 
-	private static void printClearSuccess() {
+	private static void printClearSuccess(File file) {
 		System.out.println(MESSAGE_CLEAR_SUCCESS + file);
 	}
 
-	private static void printDeleteFail(Integer lineToDelete) {
+	private static void printDeleteFail(File file, Integer lineToDelete) {
 		System.out.println(MESSAGE_DELETE_FAIL_1 + lineToDelete + MESSAGE_DELETE_FAIL_2 + file);
 	}
 
-	private static void printDeleteSuccess(String textToBeDeleted) {
+	private static void printDeleteSuccess(File file, String textToBeDeleted) {
 		System.out.println(
 				MESSAGE_INVERTED_COMMAS + textToBeDeleted + MESSAGE_INVERTED_COMMAS + MESSAGE_DELETE_SUCCESS + file);
 	}
 
-	private static void printDisplayEmpty() {
+	private static void printDisplayEmpty(File file) {
 		System.out.println(file + MESSAGE_DISPLAY_EMPTY);
 	}
 
-	private static void printOrderedList(ArrayList<String> stringArray, int numOfLines) throws IOException {
-		stringArray = contentToArray(numOfLines);
+	private static void printOrderedList(ArrayList<String> stringArray, int numOfLines) {
 		int index = 1;
 		for (int i = 0; i < numOfLines; i++) {
 			System.out.print(index + ". ");
