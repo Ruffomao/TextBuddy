@@ -9,14 +9,13 @@ import java.util.*;
 
 public class TextBuddy {
 
+	/*
+	 * ATTRIBUTES
+	 */
 	private static boolean IS_ACCEPTING_COMMAND = true;
 	private static Scanner sc = new Scanner(System.in);
 	private static File file;
-	private static FileWriter writer;
-	private static BufferedWriter bufferedWriter;
-	private static FileReader reader;
-	private static BufferedReader bufferedReader;
-	private static PrintWriter printWriter;
+	private static TextBuddy textBuddy;
 
 	/*
 	 * MESSAGES
@@ -32,7 +31,8 @@ public class TextBuddy {
 	private static final String MESSAGE_DELETE_FAIL_1 = "Failed to delete line ";
 	private static final String MESSAGE_DELETE_FAIL_2 = " from ";
 	private static final String MESSAGE_DELETE_SUCCESS = " successfully deleted from ";
-	//private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
+	// private static final String MESSAGE_SORT_SUCCESS = " has been sorted
+	// successfully";
 
 	/*
 	 * OPERATIONS
@@ -42,30 +42,36 @@ public class TextBuddy {
 	};
 
 	public static void main(String[] args) throws IOException {
-		initiateProgram(args);
-		runProgram();
+		textBuddy = new TextBuddy(args);
+		runProgram(args);
 	}
 
-	public static void initiateProgram(String[] args) throws IOException {
+	/*
+	 * CONSTRUCTORS
+	 */
+	public TextBuddy() {
+		
+	}
+	
+	public TextBuddy(String[] args) throws IOException {
 		file = new File(args[0]);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
-		printWelcome(args);
 	}
 
-	public static void runProgram() throws IOException {
+	private static void runProgram(String[] args) throws IOException {
+		printWelcome(args[0]);
 		while (IS_ACCEPTING_COMMAND) {
 			printCommandPrompt();
 			executeCommand(parseCommand());
 		}
 	}
-
 	/*
 	 * Parses the user entered string and returns an ArrayList<String>
 	 * containing the command and the relevant contents
 	 */
-	public static ArrayList<String> parseCommand() {
+	private static ArrayList<String> parseCommand() {
 		String userCommand = sc.nextLine();
 		ArrayList<String> commandArray = new ArrayList<String>();
 		commandArray.add(getOperation(userCommand));
@@ -88,22 +94,22 @@ public class TextBuddy {
 	 * @param command: An ArrayList containing the command and its relevant
 	 * content
 	 */
-	public static void executeCommand(ArrayList<String> command) throws IOException {
+	private static void executeCommand(ArrayList<String> command) throws IOException {
 		OPERATION_TYPE operationType = getOperationType(command.get(0));
 		String operationContent = command.get(1);
 
 		switch (operationType) {
 		case ADD:
-			operationAdd(operationContent);
+			textBuddy.operationAdd(operationContent);
 			return;
 		case DISPLAY:
-			operationDisplay();
+			textBuddy.operationDisplay();
 			return;
 		case CLEAR:
-			operationClear();
+			textBuddy.operationClear();
 			return;
 		case DELETE:
-			operationDelete(operationContent);
+			textBuddy.operationDelete(operationContent);
 			return;
 		/*
 		 * case SORT: operationSort(); return; /* case SEARCH:
@@ -113,7 +119,7 @@ public class TextBuddy {
 			IS_ACCEPTING_COMMAND = false;
 			return;
 		default:
-			operationInvalid();
+			textBuddy.operationInvalid();
 			return;
 		}
 	}
@@ -121,7 +127,7 @@ public class TextBuddy {
 	/*
 	 * Casts a string type into an OPERATION_TYPE
 	 */
-	public static OPERATION_TYPE getOperationType(String userOperation) {
+	private static OPERATION_TYPE getOperationType(String userOperation) {
 		if (userOperation.equalsIgnoreCase("add")) {
 			return OPERATION_TYPE.ADD;
 		} else if (userOperation.equalsIgnoreCase("display")) {
@@ -140,17 +146,20 @@ public class TextBuddy {
 			return OPERATION_TYPE.INVALID;
 		}
 	}
-
-	public static void operationInvalid() {
+	
+	/*
+	 * OPERATIONS
+	 */
+	public void operationInvalid() {
 		printCommandInvalid();
 	}
 
-	public static void operationAdd(String operationContent) throws IOException {
+	public void operationAdd(String operationContent) throws IOException {
 		writeToFile(operationContent);
 		printAddSuccess(operationContent);
 	}
 
-	public static void operationDisplay() throws IOException {
+	public void operationDisplay() throws IOException {
 		int numOfLines = countNumOfLines();
 		if (numOfLines > 0) {
 			ArrayList<String> sentencesArray = new ArrayList<String>();
@@ -160,12 +169,12 @@ public class TextBuddy {
 		}
 	}
 
-	public static void operationClear() throws IOException {
+	public void operationClear() throws IOException {
 		clearAllContent();
 		printClearSuccess();
 	}
 
-	public static void operationDelete(String content) throws IOException {
+	public void operationDelete(String content) throws IOException {
 		int lineToDelete = new Integer(content);
 		int numOfLines = countNumOfLines();
 		if (lineToDelete > numOfLines) {
@@ -175,14 +184,19 @@ public class TextBuddy {
 			printDeleteSuccess(textToBeDeleted);
 		}
 	}
-
+	
+	
+	/*
+	 * PRIVATE METHODS 
+	 */
+	
 	/*
 	 * Writes a string onto the file
 	 * 
 	 * @param content: the string which is to be written onto the file
 	 */
-	public static void writeToFile(String content) throws IOException {
-		createWriter();
+	private static void writeToFile(String content) throws IOException {
+		PrintWriter printWriter = createWriter();
 		printWriter.println(content);
 		printWriter.close();
 	}
@@ -196,7 +210,7 @@ public class TextBuddy {
 	 * 
 	 * @return the string which has been deleted
 	 */
-	public static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
+	private static String deleteLine(int lineToDelete, int numOfLines) throws IOException {
 		ArrayList<String> sentencesArray = new ArrayList<String>();
 		sentencesArray = contentToArray(numOfLines);
 		String textToBeDeleted = getSpecificLine(sentencesArray, lineToDelete);
@@ -214,7 +228,7 @@ public class TextBuddy {
 	 * storing the contents of the file
 	 * 
 	 */
-	public static void arrayToFile(ArrayList<String> textArray) throws IOException {
+	private static void arrayToFile(ArrayList<String> textArray) throws IOException {
 		String stringToAdd;
 		for (int i = 0; i < textArray.size(); i++) {
 			stringToAdd = textArray.get(i);
@@ -223,8 +237,8 @@ public class TextBuddy {
 	}
 
 	// This method clears all the contents on a file
-	public static void clearAllContent() throws FileNotFoundException {
-		printWriter = new PrintWriter(file);
+	private static void clearAllContent() throws FileNotFoundException {
+		PrintWriter printWriter = new PrintWriter(file);
 		printWriter.print("");
 		printWriter.close();
 	}
@@ -253,9 +267,9 @@ public class TextBuddy {
 	 * 
 	 * @return the number of lines in the file
 	 */
-	public static int countNumOfLines() throws IOException {
+	private static int countNumOfLines() throws IOException {
 		int numberOfLines = 0;
-		createReader();
+		BufferedReader bufferedReader = createReader();
 		while (bufferedReader.readLine() != null) {
 			numberOfLines++;
 		}
@@ -271,8 +285,8 @@ public class TextBuddy {
 	 * 
 	 * @return an ArrayList<String> with the contents of the file
 	 */
-	public static ArrayList<String> contentToArray(int numOfLines) throws IOException {
-		createReader();
+	private static ArrayList<String> contentToArray(int numOfLines) throws IOException {
+		BufferedReader bufferedReader = createReader();
 		ArrayList<String> textArray = new ArrayList<String>();
 		for (int i = 0; i < numOfLines; i++) {
 			textArray.add(bufferedReader.readLine());
@@ -284,25 +298,27 @@ public class TextBuddy {
 	/*
 	 * Instantiates the FileReader and BufferedReader objects
 	 */
-	public static void createReader() throws FileNotFoundException {
-		reader = new FileReader(file);
-		bufferedReader = new BufferedReader(reader);
+	private static BufferedReader createReader() throws FileNotFoundException {
+		FileReader reader = new FileReader(file);
+		BufferedReader bufferedReader = new BufferedReader(reader);
+		return bufferedReader;
 	}
 
 	/*
 	 * Instantiates the FileWriter, BufferedWriter and PrintWriter objects
 	 */
-	public static void createWriter() throws IOException {
-		writer = new FileWriter(file, true);
-		bufferedWriter = new BufferedWriter(writer);
-		printWriter = new PrintWriter(bufferedWriter);
+	private static PrintWriter createWriter() throws IOException {
+		FileWriter writer = new FileWriter(file, true);
+		BufferedWriter bufferedWriter = new BufferedWriter(writer);
+		PrintWriter printWriter = new PrintWriter(bufferedWriter);
+		return printWriter;
 	}
 
 	/*
 	 * PRINT METHODS
 	 */
-	private static void printWelcome(String[] args) {
-		System.out.println(MESSAGE_WELCOME_1 + args[0] + MESSAGE_WELCOME_2);
+	private static void printWelcome(String content) {
+		System.out.println(MESSAGE_WELCOME_1 + content + MESSAGE_WELCOME_2);
 	}
 
 	private static void printCommandPrompt() {
