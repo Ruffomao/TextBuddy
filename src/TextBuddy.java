@@ -188,19 +188,12 @@ public class TextBuddy {
 	}
 
 	public void operationSort(File file) throws IOException {
-		ArrayList<String> contentArray = new ArrayList<String>();
-		contentArray = contentToArray(file, countNumOfLines(file));
-		contentArray = sortArray(contentArray);
-		clearAllContent(file);
-		arrayToFile(file, contentArray);
+		sortFile(file);
 		printMessageSuccess(file);
 	}
 
 	public void operationSearch(File file, String stringToSearch) throws IOException {
-		ArrayList<String> contentArray = new ArrayList<String>();
-		contentArray = contentToArray(file, countNumOfLines(file));
-		ArrayList<String> searchResults = new ArrayList<String>();
-		searchResults = searchForWord(contentArray, stringToSearch);
+		ArrayList<String> searchResults = searchInFile(file, stringToSearch);
 		if (searchResults.size() > 0) {
 			printOrderedList(searchResults);
 		} else {
@@ -324,15 +317,47 @@ public class TextBuddy {
 		Collections.sort(contentArray);
 		return contentArray;
 	}
-	
+
+	/*
+	 * Sorts the contents of the file in alphabetical order
+	 * 
+	 * @param file: the file to be sorted
+	 */
+	public void sortFile(File file) throws IOException, FileNotFoundException {
+		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = contentToArray(file, countNumOfLines(file));
+		contentArray = sortArray(contentArray);
+		clearAllContent(file);
+		arrayToFile(file, contentArray);
+	}
+
+	/*
+	 * Searches for a specific string in the file
+	 * 
+	 * @param file: the file to be searched
+	 * 
+	 * @param stringToSearch: the specific string
+	 * 
+	 * @return an ArrayList with the strings containing the specific string
+	 */
+	private ArrayList<String> searchInFile(File file, String stringToSearch) throws IOException {
+		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = contentToArray(file, countNumOfLines(file));
+		ArrayList<String> searchResults = new ArrayList<String>();
+		searchResults = searchForWord(contentArray, stringToSearch);
+		return searchResults;
+	}
+
 	/*
 	 * Searches for the word in the ArrayList
 	 * 
 	 * @param contentArray: the ArrayList to be searched
 	 * 
-	 * @param stringToSearch: the string which needed to be searched in the ArrayList
+	 * @param stringToSearch: the string which needed to be searched in the
+	 * ArrayList
 	 * 
-	 * @return the ArrayList containing all the strings which contains stringToSearch
+	 * @return the ArrayList containing all the strings which contains
+	 * stringToSearch
 	 */
 	public static ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
 		ArrayList<String> searchArray = new ArrayList<String>();
@@ -349,7 +374,8 @@ public class TextBuddy {
 	/*
 	 * Removes duplicate strings in the ArrayList
 	 * 
-	 * @param searchArray: the ArrayList containing the results from searchForWord()
+	 * @param searchArray: the ArrayList containing the results from
+	 * searchForWord()
 	 * 
 	 * @return an ArrayList without duplicate strings in it
 	 */
