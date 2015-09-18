@@ -28,7 +28,8 @@ public class TextBuddy {
 	private static final String MESSAGE_DELETE_FAIL_2 = " from ";
 	private static final String MESSAGE_DELETE_SUCCESS = " successfully deleted from ";
 	private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
-
+	private static final String MESSAGE_SEARCH_FAIL = " not found in ";
+	
 	/*
 	 * OPERATIONS
 	 */
@@ -164,7 +165,7 @@ public class TextBuddy {
 		if (numOfLines > 0) {
 			ArrayList<String> sentencesArray = new ArrayList<String>();
 			sentencesArray = contentToArray(file, numOfLines);
-			printOrderedList(sentencesArray, numOfLines);
+			printOrderedList(sentencesArray);
 		} else {
 			printDisplayEmpty(file);
 		}
@@ -195,7 +196,17 @@ public class TextBuddy {
 		printMessageSuccess(file);
 	}
 
-	public void operationSearch(File file, String stringToSearch) {
+	public void operationSearch(File file, String stringToSearch) throws IOException {
+		ArrayList<String> contentArray = new ArrayList<String>();
+		contentArray = contentToArray(file, countNumOfLines(file));
+		ArrayList<String> searchArray = new ArrayList<String>();
+		searchArray = searchForWord(contentArray, stringToSearch);
+		if (searchArray.size() > 0) {
+			printOrderedList(searchArray);
+		}
+		else {
+			printSearchFail(file, stringToSearch);
+		}
 	}
 
 	/*
@@ -314,6 +325,16 @@ public class TextBuddy {
 		Collections.sort(contentArray);
 		return contentArray;
 	}
+	
+	private ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
+		ArrayList<String> searchArray = new ArrayList<String>();
+		for (String string : contentArray) {
+			if (string.matches(stringToSearch)) {
+				searchArray.add(string);
+			}
+		}
+		return searchArray;
+	}
 
 	/*
 	 * Instantiates the FileReader and BufferedReader objects
@@ -369,14 +390,18 @@ public class TextBuddy {
 	private void printMessageSuccess(File file) {
 		System.out.println(file + MESSAGE_SORT_SUCCESS);
 	}
+	
+	private void printSearchFail(File file, String stringToSearch) {
+		System.out.println(stringToSearch + MESSAGE_SEARCH_FAIL + MESSAGE_INVERTED_COMMAS + file + MESSAGE_INVERTED_COMMAS);
+	}
 
 	private static void printDisplayEmpty(File file) {
 		System.out.println(file + MESSAGE_DISPLAY_EMPTY);
 	}
 
-	private static void printOrderedList(ArrayList<String> stringArray, int numOfLines) {
+	private static void printOrderedList(ArrayList<String> stringArray) {
 		int index = 1;
-		for (int i = 0; i < numOfLines; i++) {
+		for (int i = 0; i < stringArray.size(); i++) {
 			System.out.print(index + ". ");
 			System.out.print(stringArray.get(i));
 			System.out.println();

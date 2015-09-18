@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ExecuteSortTest {
 
 	@Test
-	public void testOperationTest1() throws IOException {
+	public void testOperationSort1() throws IOException {
 		File testFile = new File("test.txt");
 		TextBuddy.clearAllContent(testFile);
 		TextBuddy.writeToFile(testFile, "d");
@@ -31,7 +31,7 @@ public class ExecuteSortTest {
 	}
 	
 	@Test
-	public void testOperationTest2() throws IOException {
+	public void testOperationSort2() throws IOException {
 		File testFile = new File("test.txt");
 		TextBuddy.clearAllContent(testFile);
 		TextBuddy.writeToFile(testFile, "e");

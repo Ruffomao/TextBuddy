@@ -20,7 +20,7 @@ public class ExecuteSearchTest {
 		ByteArrayOutputStream resultContent = new ByteArrayOutputStream();
 		
 		System.setOut(new PrintStream(resultContent));
-		assertEquals("A B C", resultContent.toString());
+		assertEquals("1. A B C", resultContent.toString());
 		
 	}
 
