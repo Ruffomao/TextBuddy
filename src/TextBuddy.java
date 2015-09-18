@@ -112,9 +112,9 @@ public class TextBuddy {
 		case SORT:
 			textBuddy.operationSort(file);
 			return;
-		/*
-		 * case SEARCH: operationSearch(); return;
-		 */
+		case SEARCH:
+			textBuddy.operationSearch(file, operationContent);
+			return;
 		case EXIT:
 			IS_ACCEPTING_COMMAND = false;
 			return;
@@ -193,6 +193,9 @@ public class TextBuddy {
 		clearAllContent(file);
 		arrayToFile(file, contentArray);
 		printMessageSuccess(file);
+	}
+
+	public void operationSearch(File file, String stringToSearch) {
 	}
 
 	/*
@@ -362,7 +365,7 @@ public class TextBuddy {
 		System.out.println(
 				MESSAGE_INVERTED_COMMAS + textToBeDeleted + MESSAGE_INVERTED_COMMAS + MESSAGE_DELETE_SUCCESS + file);
 	}
-	
+
 	private void printMessageSuccess(File file) {
 		System.out.println(file + MESSAGE_SORT_SUCCESS);
 	}
