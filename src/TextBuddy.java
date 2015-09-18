@@ -324,7 +324,16 @@ public class TextBuddy {
 		Collections.sort(contentArray);
 		return contentArray;
 	}
-
+	
+	/*
+	 * Searches for the word in the ArrayList
+	 * 
+	 * @param contentArray: the arraylist to be searched
+	 * 
+	 * @param stringToSearch: the string which needed to be searched in the arraylist
+	 * 
+	 * @return the arraylist containing all the strings which contains stringToSearch
+	 */
 	private ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
 		ArrayList<String> searchArray = new ArrayList<String>();
 		for (String string : contentArray) {
@@ -337,6 +346,13 @@ public class TextBuddy {
 		return searchArray;
 	}
 
+	/*
+	 * Removes duplicate strings in the arraylist
+	 * 
+	 * @param searchArray: the arraylist containing the results from searchForWord()
+	 * 
+	 * @return an arraylist without duplicate strings in it
+	 */
 	private ArrayList<String> removeDuplicates(ArrayList<String> searchArray) {
 		ArrayList<String> resultArray = new ArrayList<String>();
 		HashSet<String> uniqueSet = new HashSet<String>();

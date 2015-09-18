@@ -15,11 +15,7 @@ public class ExecuteSearchTest {
 		TextBuddy.writeToFile(testFile, "X Y Z");
 		TextBuddy test = new TextBuddy();
 		
-		test.operationSearch(testFile, "A");
-		
-		ByteArrayOutputStream resultContent = new ByteArrayOutputStream();
-		System.setOut(new PrintStream(resultContent));
-		assertEquals("1. A B C", resultContent.toString());
+		assertEquals("1. A B C", test.operationSearch(testFile, "A"));
 	}
 
 }
