@@ -3,7 +3,7 @@ import java.util.*;
 
 /*
  * This class allows user to create text files (.txt) and manipulate the contents within them on the command line.
- * Four basic operations are provided by this class to be used in manipulating a file's contents.
+ * Six basic operations are provided by this class to be used in manipulating a file's contents.
  * It is assumed that the name of the file is indicated immediately after the execution of the .class file
  */
 
@@ -89,6 +89,15 @@ public class TextBuddy {
 	/*
 	 * Executes the relevant methods depending on the command entered by the
 	 * user
+	 * 
+	 * ADD: appends a string to the end of the text file
+	 * DISPLAY: displays an ordered list of strings in the text file
+	 * CLEAR: clear all the content in the file
+	 * DELETE: deletes a specific line in the file
+	 * SORT: sorts the strings in the text file in alphabetical order
+	 * SEARCH: searches for a specific word or string in the text file and 
+	 * displays an ordered list of the lines containing the word
+	 * 
 	 * 
 	 * @param command: An ArrayList containing the command and its relevant
 	 * content
@@ -454,7 +463,12 @@ public class TextBuddy {
 	private static void printDisplayEmpty(File file) {
 		System.out.println(file + MESSAGE_DISPLAY_EMPTY);
 	}
-
+	
+	/*
+	 * Prints an ordered list of the contents in an ArrayList
+	 * 
+	 * @param stringArray: the ArrayList to be printed
+	 */
 	private static void printOrderedList(ArrayList<String> stringArray) {
 		int index = 1;
 		for (int i = 0; i < stringArray.size(); i++) {
