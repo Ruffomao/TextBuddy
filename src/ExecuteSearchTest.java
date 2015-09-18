@@ -18,10 +18,8 @@ public class ExecuteSearchTest {
 		test.operationSearch(testFile, "A");
 		
 		ByteArrayOutputStream resultContent = new ByteArrayOutputStream();
-		
 		System.setOut(new PrintStream(resultContent));
 		assertEquals("1. A B C", resultContent.toString());
-		
 	}
 
 }

@@ -29,7 +29,7 @@ public class TextBuddy {
 	private static final String MESSAGE_DELETE_SUCCESS = " successfully deleted from ";
 	private static final String MESSAGE_SORT_SUCCESS = " has been sorted successfully";
 	private static final String MESSAGE_SEARCH_FAIL = " not found in ";
-	
+
 	/*
 	 * OPERATIONS
 	 */
@@ -199,12 +199,11 @@ public class TextBuddy {
 	public void operationSearch(File file, String stringToSearch) throws IOException {
 		ArrayList<String> contentArray = new ArrayList<String>();
 		contentArray = contentToArray(file, countNumOfLines(file));
-		ArrayList<String> searchArray = new ArrayList<String>();
-		searchArray = searchForWord(contentArray, stringToSearch);
-		if (searchArray.size() > 0) {
-			printOrderedList(searchArray);
-		}
-		else {
+		ArrayList<String> searchResults = new ArrayList<String>();
+		searchResults = searchForWord(contentArray, stringToSearch);
+		if (searchResults.size() > 0) {
+			printOrderedList(searchResults);
+		} else {
 			printSearchFail(file, stringToSearch);
 		}
 	}
@@ -325,15 +324,29 @@ public class TextBuddy {
 		Collections.sort(contentArray);
 		return contentArray;
 	}
-	
+
 	private ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
 		ArrayList<String> searchArray = new ArrayList<String>();
 		for (String string : contentArray) {
-			if (string.matches(stringToSearch)) {
+			if (string.contains(stringToSearch)) {
 				searchArray.add(string);
 			}
 		}
+		searchArray = removeDuplicates(searchArray);
+		searchArray = sortArray(searchArray);
 		return searchArray;
+	}
+
+	private ArrayList<String> removeDuplicates(ArrayList<String> searchArray) {
+		ArrayList<String> resultArray = new ArrayList<String>();
+		HashSet<String> uniqueSet = new HashSet<String>();
+		for (String uniqueString : searchArray) {
+			if (!uniqueSet.contains(uniqueString)) {
+				resultArray.add(uniqueString);
+				uniqueSet.add(uniqueString);
+			}
+		}
+		return resultArray;
 	}
 
 	/*
@@ -390,9 +403,10 @@ public class TextBuddy {
 	private void printMessageSuccess(File file) {
 		System.out.println(file + MESSAGE_SORT_SUCCESS);
 	}
-	
+
 	private void printSearchFail(File file, String stringToSearch) {
-		System.out.println(stringToSearch + MESSAGE_SEARCH_FAIL + MESSAGE_INVERTED_COMMAS + file + MESSAGE_INVERTED_COMMAS);
+		System.out.println(MESSAGE_INVERTED_COMMAS + stringToSearch + MESSAGE_INVERTED_COMMAS + MESSAGE_SEARCH_FAIL
+				+ MESSAGE_INVERTED_COMMAS + file + MESSAGE_INVERTED_COMMAS);
 	}
 
 	private static void printDisplayEmpty(File file) {
