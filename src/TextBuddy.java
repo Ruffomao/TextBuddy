@@ -328,13 +328,13 @@ public class TextBuddy {
 	/*
 	 * Searches for the word in the ArrayList
 	 * 
-	 * @param contentArray: the arraylist to be searched
+	 * @param contentArray: the ArrayList to be searched
 	 * 
-	 * @param stringToSearch: the string which needed to be searched in the arraylist
+	 * @param stringToSearch: the string which needed to be searched in the ArrayList
 	 * 
-	 * @return the arraylist containing all the strings which contains stringToSearch
+	 * @return the ArrayList containing all the strings which contains stringToSearch
 	 */
-	private ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
+	public static ArrayList<String> searchForWord(ArrayList<String> contentArray, String stringToSearch) {
 		ArrayList<String> searchArray = new ArrayList<String>();
 		for (String string : contentArray) {
 			if (string.contains(stringToSearch)) {
@@ -347,13 +347,13 @@ public class TextBuddy {
 	}
 
 	/*
-	 * Removes duplicate strings in the arraylist
+	 * Removes duplicate strings in the ArrayList
 	 * 
-	 * @param searchArray: the arraylist containing the results from searchForWord()
+	 * @param searchArray: the ArrayList containing the results from searchForWord()
 	 * 
-	 * @return an arraylist without duplicate strings in it
+	 * @return an ArrayList without duplicate strings in it
 	 */
-	private ArrayList<String> removeDuplicates(ArrayList<String> searchArray) {
+	public static ArrayList<String> removeDuplicates(ArrayList<String> searchArray) {
 		ArrayList<String> resultArray = new ArrayList<String>();
 		HashSet<String> uniqueSet = new HashSet<String>();
 		for (String uniqueString : searchArray) {

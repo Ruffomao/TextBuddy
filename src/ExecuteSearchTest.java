@@ -1,21 +1,31 @@
 import static org.junit.Assert.*;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
 public class ExecuteSearchTest {
-
+	
 	@Test
-	public void testOperationSearch() throws IOException {
-		File testFile = new File("test.txt");
-		TextBuddy.clearAllContent(testFile);
-		TextBuddy.writeToFile(testFile, "A B C");
-		TextBuddy.writeToFile(testFile, "D E F");
-		TextBuddy.writeToFile(testFile, "X Y Z");
-		TextBuddy test = new TextBuddy();
+	public void testSearchForWord1() {
+		ArrayList<String> testArray = new ArrayList<String>();
+		testArray.add("ABC");
+		testArray.add("DEF");
+		testArray.add("GHI");
 		
-		assertEquals("1. A B C", test.operationSearch(testFile, "A"));
+		ArrayList<String> resultArray = new ArrayList<String>();
+		resultArray = TextBuddy.searchForWord(testArray, "A");
+		
+		Object[] result = new String[resultArray.size()];
+		result = resultArray.toArray();
+		String[] expected = {"ABC"};
+		assertArrayEquals(expected, result);
+	}
+	
+	@Test
+	public void testSearchForWord2() {
+		
 	}
 
 }
